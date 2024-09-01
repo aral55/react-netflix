@@ -26,22 +26,22 @@ const NavBar = () => {
       {user?.email ? (
         <div>
           <Link to="/profile">
-            <button className="capitilize pr-4">profile</button>
+            <button className="capitilize pr-4">Profile</button>
           </Link>
 
           <button onClick={handleLogOut} className="capitilize bg-red-600 px-6 py-2 rounded cursor-pointer">
-            logout
+            Logout
           </button>
         </div>
       ) : (
         <div>
           <Link to="/login">
-            <button className="capitilize pr-4">login</button>
+            <button className="capitilize pr-4">Login</button>
           </Link>
 
           <Link to="/signup">
             <button className="capitilize bg-red-600 px-6 py-2 rounded cursor-pointer">
-              sign up
+              Sign up
             </button>
           </Link>
         </div>
