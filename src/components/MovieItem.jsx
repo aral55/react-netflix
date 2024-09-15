@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { createImageUrl } from "../Services/MovieServices";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { arrayUnion, doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
@@ -12,84 +12,18 @@ const MovieItem = ({ movie }) => {
   const { title, backdrop_path, poster_path } = movie;
 
   const markFavShow = async () => {
-    try {
-      const userId = user?.uid;
+    const userEmail = user?.email;
 
-      if (userId) {
-        const userDoc = doc(db, "users", userId);
-        const docSnap = await getDoc(userDoc);
-
-        if (docSnap.exists()) {
-          const existingFavShows = docSnap.data().favShows;
-          if (existingFavShows) {
-            const existingMovie = existingFavShows.find((m) => m.id === movie.id);
-
-            if (existingMovie) {
-              // Remove the movie from the favorite list
-              const updatedFavShows = existingFavShows.filter((m) => m.id !== movie.id);
-              await updateDoc(userDoc, {
-                favShows: updatedFavShows,
-              });
-              setLike(false);
-            } else {
-              // Add the movie to the favorite list
-              await updateDoc(userDoc, {
-                favShows: arrayUnion({ ...movie }),
-              });
-              setLike(true);
-            }
-          } else {
-            // Create a new favorite shows array
-            await updateDoc(userDoc, {
-              favShows: [{ ...movie }],
-            });
-            setLike(true);
-          }
-        } else {
-          // Create a new document for the user
-          await setDoc(userDoc, {
-            favShows: [{ ...movie }],
-          });
-          setLike(true);
-        }
-      } else {
-        alert("Login to save movie");
-      }
-    } catch (error) {
-      console.error("Error marking favorite show:", error);
+    if (userEmail) {
+      const userDoc = doc(db, "users", userEmail);
+      setLike(!like);
+      await updateDoc(userDoc, {
+        favShows: arrayUnion({ ...movie }),
+      });
+    } else {
+      alert("Login to save movie");
     }
   };
-
-  useEffect(() => {
-    if (user && user.uid && movie) {
-      const checkIfMovieIsFavorite = async () => {
-        try {
-          const userId = user.uid;
-          const userDoc = doc(db, "users", userId);
-          const docSnap = await getDoc(userDoc);
-
-          if (docSnap.exists()) {
-            const existingFavShows = docSnap.data().favShows;
-            if (existingFavShows) {
-              const existingMovie = existingFavShows.find((m) => m.id === movie.id);
-
-              if (existingMovie) {
-                setLike(true);
-              } else {
-                setLike(false);
-              }
-            } else {
-              console.log("No favorite shows found");
-            }
-          }
-        } catch (error) {
-          console.error("Error checking favorite show:", error);
-        }
-      };
-
-      checkIfMovieIsFavorite();
-    }
-  }, [user, movie]);
 
   return (
     <div
