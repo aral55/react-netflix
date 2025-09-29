@@ -16,9 +16,9 @@ I built the app using React with React Router for navigation and Context API for
 - CSS / Responsive Design  
 
 ## 📸 Screenshots
-![Home Page](./src/assets/home-screenshot.png)
-![Login Page](./src/assets/login-screenshot.png)
-![Profile Page](./src/assets/profile-screenshot.png)
+![Home Page](./src/images/home.png)
+![Login Page](./src/images/login.png)
+![Profile Page](./src/images/profile.png)
 
 
 ## ✅ Outcome
